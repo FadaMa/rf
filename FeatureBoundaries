@@ -1,0 +1,44 @@
+import numpy as np
+import scipy.sparse as sc
+
+print("With Original data:")
+D1 = np.load("dataset_4604_vectorized_for_model_1585.npz",encoding='latin1')["default"]
+X_train = D1.tolist()['X']
+data = sc.csr_matrix(X_train.toarray())
+values = []
+for i in range(data.shape[0]):
+	values.append(data.getrow(i).indices)
+
+print("Indices of the 1st row: ",values[0])
+print("Indices of the 10th row: ",values[9])
+
+print('\n', "With Generated data:")
+data2 = [[1,0,0,0,0,0,0,0,0,0,1,0],
+[0,1,0,0,0,0,0,0,0,0,0,1],
+[0,1,0,0,0,0,0,0,0,0,0,1],
+[0,0,1,0,0,0,0,0,0,0,1,0],
+[0,0,0,1,0,0,0,0,0,0,1,0],
+[0,0,0,0,1,0,0,0,0,0,1,0],
+[0,0,0,0,1,0,0,0,0,0,1,0],
+[0,0,0,0,1,0,0,0,0,0,0,1],
+[0,0,0,0,0,0,0,0,0,1,0,1],
+[0,0,0,0,0,0,0,0,0,1,0,1],
+[0,0,0,0,0,0,0,0,0,1,0,1],
+[0,0,0,0,0,0,0,0,0,1,1,0],
+[0,0,0,0,0,0,0,0,1,0,1,0]]
+data2 = sc.csc_matrix(data2)
+values2 = []
+for i in range(data2.shape[0]):
+	values2.append(data2.getrow(i).indices)
+
+indices = []
+mins2 = []
+
+for i in range(len(values2[0])):
+    indices.append([x[i] for x in values2])
+    mins2.append(min([x[i] for x in values2]))
+
+print("Boundaries are ",mins2)
+
+print("Values of feature 1 include: ", indices[0])
+print("Values of feature 2 include: ", indices[1])
