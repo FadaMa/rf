@@ -10,12 +10,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import BaggingClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score, accuracy_score, precision_score, f1_score
 from collections import Counter
 import scipy
-
-from sklearn.metrics import accuracy_score, precision_score, f1_score
-
 
 def main():
 
