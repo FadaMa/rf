@@ -1,0 +1,58 @@
+#https://kdd.ics.uci.edu/databases/census-income/
+
+import numpy as np
+from sklearn import preprocessing
+
+dataset = np.genfromtxt('census-income.test.gz',delimiter=',',usemask=False,dtype=str)
+le = preprocessing.LabelBinarizer()
+
+#takes one feature and binarizes the data (17 distinct categories)
+data = le.fit_transform([x[4] for x in dataset])
+
+#find binary columns
+a=[]
+b=[]
+for j, e in enumerate(data[0]):
+		if e==0 or e==1:
+			b.append(j)
+for i in range(data.shape[0]):
+	for j, e in enumerate(data[i]):
+		if e==0 or e==1:
+			a.append(j)
+	b = list(set(a) & set(b))
+	a = []
+print(b)
+#find boundaries
+#c = columns
+c=[]
+for i in range(data.shape[1]):
+	c.append([x[i] for x in data])
+#1 indices in each column 
+oneindices = []
+for i in range(len(c)):
+	for j, e in enumerate(c[i]):
+		if e==1:
+			b.append(j)
+	oneindices.append(b)
+	b=[]
+
+# find intersection of rows - when non-empty is the intersection, we have found a boundary
+unio=[]
+bounaries = []
+for j, e in enumerate(oneindices):
+    if(list(set(e)&set(unio)) != []):
+        bounaries.append(j)
+        unio=[]
+    unio = set(e).union(set(unio))
+
+print(bounaries)
+#######prints 3, while it seems that 16 is the boundary (the feature has 17 values 0, 1, ..., 16######
+'''#first categorize based on country(ftr1) then bucketize based on label    
+usa 000100001100000001000000001001
+ind 11000001111000000010
+aus 0100000010
+ita 01
+uk  000001
+fra 0
+con 00
+'''
